@@ -5,26 +5,23 @@ package:
   version: {{ version }}
 
 source:
-  fn: mpir-{{ version }}.tar.bz2
   url: http://mpir.org/mpir-{{ version }}.tar.bz2
   sha256: 52f63459cf3f9478859de29e00357f004050ead70b45913f2c2269d9708675bb
 
 build:
-  number: 0
-  skip: true          # [win and not (py34 or py35)]
-  skip: true          # [unix and not py35]
-  features:
-    - vc14            # [win and py35]
+  number: 1
+  skip: true          # [win and vc<14]
+  # HACK: conda-build wants to use the python matrix here
+  skip: true          # [py != 36]
+  # skip: true          # [unix and not py35]
 
 requirements:
   build:
     - m4              # [unix]
     - python
-    - toolchain       # [unix]
     - yasm            # [unix]
-    - vc 14           # [win and py35]
-  run:
-    - vc 14           # [win and py35]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
 
 test:
   files:
