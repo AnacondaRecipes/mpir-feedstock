@@ -24,6 +24,8 @@ requirements:
     - {{ compiler('cxx') }}
 
 test:
+  requires:
+    - {{ compiler('c') }}
   files:
     - test.c
   commands:
