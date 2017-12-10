@@ -4,13 +4,28 @@ if "%ARCH%"=="32" (
     set PLATFORM=x64
 )
 
+set VSPROJ_EXT="vcxproj"
+
+if "%VS_YEAR%" == "2008" (
+  xcopy /s /y /i %RECIPE_DIR%\build.vc9 %SRC_DIR%\build.vc9
+  copy %LIBRARY_INC%\stdint.h %SRC_DIR%\
+  copy %LIBRARY_INC%\inttypes.h %SRC_DIR%\
+  REM VS2008 doesn't like source code files with same names
+  for %%s in (mpf mpq mpz mpn\generic) do (
+    for /f "delims=" %%i in ('dir /b %%s\*.c') do (
+      move %%s\%%i %%s\%%~ns_%%i
+    )
+  )
+  set VSPROJ_EXT="vcproj"
+)
+
 cd build.vc%VS_MAJOR%
 
 REM build static library
-msbuild.exe /p:Platform=%PLATFORM% /p:Configuration=Release lib_mpir_gc\lib_mpir_gc.vcxproj
-msbuild.exe /p:Platform=%PLATFORM% /p:Configuration=Release lib_mpir_cxx\lib_mpir_cxx.vcxproj
+msbuild.exe /p:Platform=%PLATFORM% /p:Configuration=Release lib_mpir_gc\lib_mpir_gc.%VSPROJ_EXT%
+msbuild.exe /p:Platform=%PLATFORM% /p:Configuration=Release lib_mpir_cxx\lib_mpir_cxx.%VSPROJ_EXT%
 REM build dll library, cxx is also included.
-msbuild.exe /p:Platform=%PLATFORM% /p:Configuration=Release dll_mpir_gc\dll_mpir_gc.vcxproj
+msbuild.exe /p:Platform=%PLATFORM% /p:Configuration=Release dll_mpir_gc\dll_mpir_gc.%VSPROJ_EXT%
 
 if not exist "%LIBRARY_LIB%" mkdir %LIBRARY_LIB%
 if not exist "%LIBRARY_INC%" mkdir %LIBRARY_INC%

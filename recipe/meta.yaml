@@ -10,15 +10,12 @@ source:
 
 build:
   number: 1
-  skip: true          # [win and vc<14]
-  # HACK: conda-build wants to use the python matrix here
-  skip: true          # [py != 36]
-  # skip: true          # [unix and not py35]
 
 requirements:
+  host:
+    - msinttypes      # [win and vc<14]
   build:
     - m4              # [unix]
-    - python
     - yasm            # [unix]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
