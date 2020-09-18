@@ -1,4 +1,4 @@
-{% set version = "3.0.0" %}
+{% set version = "None" %}
 
 package:
   name: mpir
@@ -6,7 +6,7 @@ package:
 
 source:
   url: http://mpir.org/mpir-{{ version }}.tar.bz2
-  sha256: 52f63459cf3f9478859de29e00357f004050ead70b45913f2c2269d9708675bb
+  sha256: 13eb7921be5e237826e882c98f0ea09f6ef9048d145be3a6a644ea48dc137e50
 
 build:
   number: 1
